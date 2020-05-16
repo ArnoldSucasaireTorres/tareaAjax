@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Ejercicio 4</title>
+        <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    </head>
+    <body>
+
+    <div id="demo">
+    <h2>Visualice un grafico en el tiempo de los valores para la region de Arequipa</h2>
+    <button type="button" onclick="valoresAQP()">Mostrar</button>
+    <div id="resultado" style="width: 900px; height: 400px;"></div>
+    </div>
+
+    <script>
+        
+        google.charts.load('current', {'packages':['bar']});
+        
+        function valoresAQP() {
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+            covidPeru=JSON.parse(this.responseText);
+            var  casosAQP=[];
+            var  regionAQP="Arequipa";
+            for(var i=0; i<covidPeru.length; i++){
+                var region=covidPeru[i].region;
+                if(region=="Arequipa"){
+                    var casos=covidPeru[i].confirmed;
+                    for(var j=0; j<casos.length; j++){
+                        casosAQP[j]={"fecha":casos[j].date,"casos":casos[j].value};
+                    }
+
+                }
+                 
+            }
+            casosAQP.sort(function(a,b){
+                return (a.casos - b.casos)
+            })
+            var resultado=[];
+            resultado[0]=['Arequipa', 'Casos'];
+            for(var i=0; i<covidPeru.length; i++){
+                resultado[i+1]=[casosAQP[i].fecha,casosAQP[i].casos];
+            }
+            var data = new google.visualization.arrayToDataTable(resultado);
+
+            var options = {
+                title: 'Chess opening moves',
+                width: 700,
+                legend: { position: 'none' },
+                chart: { title: 'Casos positivos de Covid en Arequipa',
+                        subtitle: 'Cuadro de resumen casos' },
+                bars: 'horizontal', // Required for Material Bar Charts.
+                axes: {
+                    x: {
+                    0: { side: 'top', label: 'Casos'} // Top x-axis.
+                    }
+            },
+                bar: { groupWidth: "90%" }
+            };
+
+            var chart = new google.charts.Bar(document.getElementById('resultado'));
+            chart.draw(data, options);
+    
+            };
+            }
+            
+        xhttp.open("GET", "data.json", true);
+        xhttp.send();
+        }
+
+        //
+        function drawStuff() {
+        
+      };
+
+    </script>
+
+    </body>
+</html>

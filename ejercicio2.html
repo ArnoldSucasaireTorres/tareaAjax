@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Ejercicio 1</title>
+    </head>
+    <body>
+
+    <div id="demo">
+    <h2>Muestre el numero total de confirmados por region</h2>
+    <button type="button" onclick="confirmados()">Mostrar</button>
+    <div id="resultado"></div>
+    </div>
+
+    <script>
+    function confirmados() {
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+        var covidPeru=JSON.parse(this.responseText);
+        var resultado="";
+        for(var i=0; i<covidPeru.length; i++){
+            resultado+=covidPeru[i].region+" : "+covidPeru[i].confirmed[64].value+", ";
+        }
+        document.getElementById("resultado").innerHTML=resultado;
+        }
+    };
+    xhttp.open("GET", "data.json", true);
+    xhttp.send();
+    }
+    </script>
+
+    </body>
+</html>

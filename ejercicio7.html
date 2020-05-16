@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Ejercicio 7</title>
+        <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    </head>
+    <body>
+
+    <div id="demo">
+    <h2>Haga gráficos comparativos entre regiones elegidas por el usuario.</h2>
+    <button type="button" onclick="mayoresContagios()">Mostrar</button>
+    <div id="resultado" style="width: 900px; height: 400px;"></div>
+    </div>
+
+    <script>
+        
+        google.charts.load('current', {'packages':['bar']});
+        
+        function mayoresContagios() {
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+            covidPeru=JSON.parse(this.responseText);
+            
+            var casosTotales=[];
+            var regiones=[];
+            var casos=covidPeru[0].confirmed;
+            regiones[0]='Genre';
+            for(var i=0; i<casos.length; i++){
+                var casosRegionesTiempo=[];
+                for(var j=0; j<covidPeru.length; j++){
+                    regiones[j+1]=covidPeru[j].region;
+
+                    casosRegionesTiempo[0]=covidPeru[j].confirmed[i].date;
+                    casosRegionesTiempo[j+1]=covidPeru[j].confirmed[i].value;
+                }
+                
+                casosRegionesTiempo[casosRegionesTiempo.length]='';
+                casosTotales[i+1]=casosRegionesTiempo;
+                
+            }
+            
+            regiones[regiones.length]={ role: 'annotation' };
+            casosTotales[0]=regiones;
+
+            console.log(casosTotales);
+
+            regiones.sort(function(a,b){
+                return (a.casos - b.casos)
+            })
+
+            
+            var data = google.visualization.arrayToDataTable(casosTotales);
+
+            var options = {
+                width: 5600,
+                height: 5400,
+                legend: { position: 'top', maxLines: 3 },
+                bar: { groupWidth: '75%' },
+                isStacked: true,
+            };
+
+            var chart = new google.charts.Bar(document.getElementById('resultado'));
+            chart.draw(data, options);
+    
+            };
+            }
+            
+        xhttp.open("GET", "data.json", true);
+        xhttp.send();
+        }
+
+        //
+        function drawStuff() {
+        
+      };
+
+    </script>
+
+    </body>
+</html>

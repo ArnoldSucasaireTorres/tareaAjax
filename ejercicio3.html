@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Ejercicio 1</title>
+    </head>
+    <body>
+
+    <div id="demo">
+    <h2>Encuentre las 10 regiones cuya suma total sea la mayor</h2>
+    <button type="button" onclick="mayoresContagios()">Mostrar</button>
+    <div id="resultado"></div>
+    </div>
+
+    <script>
+    function mayoresContagios() {
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+        covidPeru=JSON.parse(this.responseText);
+        var  ordenCasosCovidPeru=[];
+        for(var i=0; i<covidPeru.length; i++){
+            var region=covidPeru[i].region;
+            var casos=covidPeru[i].confirmed[64].value;
+            ordenCasosCovidPeru[i]={"region":region,"casos":casos};
+        }
+        ordenCasosCovidPeru.sort(function(a,b){
+            return (b.casos - a.casos)
+        })
+        var resultado="";
+        for(var i=0; i<10; i++){
+            resultado+=ordenCasosCovidPeru[i].region+" : "+ordenCasosCovidPeru[i].casos+", ";
+        }
+        document.getElementById("resultado").innerHTML=resultado;
+        }
+    };
+    xhttp.open("GET", "data.json", true);
+    xhttp.send();
+    }
+    </script>
+
+    </body>
+</html>
