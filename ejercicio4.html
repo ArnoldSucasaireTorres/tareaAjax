@@ -28,7 +28,7 @@
                 if(region=="Arequipa"){
                     var casos=covidPeru[i].confirmed;
                     for(var j=0; j<casos.length; j++){
-                        casosAQP[j]={"fecha":casos[j].date,"casos":casos[j].value};
+                        casosAQP[j]={"fecha":casos[j].date,"casos":parseInt(casos[j].value)};
                     }
 
                 }

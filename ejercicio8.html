@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <meta http-equiv="Content-type" content="text/html; charset=utf-8">
         <title>Ejercicio 8</title>
         <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     </head>
@@ -8,15 +9,15 @@
 
     <div id="demo">
     <h2>Visualice un gráfico comparativo del crecimiento en regiones excepto Lima y Callao, mostrando el número de confirmados por cada día</h2>
-    <button type="button" onclick="mayoresContagios()">Mostrar</button>
-    <div id="resultado" style="width: 1500px; height: 700px;"></div>
+    <button type="button" onclick="graficoComparativo()">Mostrar</button>
+    <div id="resultado" style="width: 1500px; height: 1700px;"></div>
     </div>
 
     <script>
         
         google.charts.load('current', {'packages':['corechart']});
         
-        function mayoresContagios() {
+        function graficoComparativo() {
             var xhttp = new XMLHttpRequest();
             xhttp.onreadystatechange = function() {
                 if (this.readyState == 4 && this.status == 200) {
@@ -26,28 +27,40 @@
                     var regiones=[];
                     var casos=covidPeru[0].confirmed;
                     regiones[0]="fecha";
+
                     for(var i=0; i<casos.length; i++){
                         var casosRegionesTiempo=[];
                         for(var j=0; j<covidPeru.length; j++){
                             regiones[j+1]=covidPeru[j].region;
-
                             casosRegionesTiempo[0]=covidPeru[j].confirmed[i].date;
                             casosRegionesTiempo[j+1]=parseInt(covidPeru[j].confirmed[i].value);
+                            
                         }
-                        
                         casosTotales[i+1]=casosRegionesTiempo;
                         
                     }
                     
                     casosTotales[0]=regiones;
-
-                    console.log(casosTotales);
-
-                    regiones.sort(function(a,b){
-                        return (a.casos - b.casos)
-                    })
-
-                    
+                    //eliminando los datos de lima
+                    var indiceL;
+                    var indiceC;
+                    for(var i=0; i<casos.length; i++){
+                        if(casosTotales[0][i]=="Lima"){
+                            indiceL=i;
+                        }
+                    }
+                    for(var i=0; i<=casos.length; i++){
+                        casosTotales[i].splice(indiceL,1);
+                    }
+                    for(var i=0; i<casos.length; i++){
+                        if(casosTotales[0][i]=="Callao"){
+                            indiceC=i;
+                        }
+                    }
+                    for(var i=0; i<=casos.length; i++){
+                        casosTotales[i].splice(indiceC,1);
+                    }      
+                    console.log(casosTotales);            
                     var data = google.visualization.arrayToDataTable(casosTotales);
 
                     var options = {

@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <meta http-equiv="Content-type" content="text/html; charset=utf-8">
         <title>Ejercicio 6</title>
         <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     </head>
@@ -32,7 +33,7 @@
                     regiones[j+1]=covidPeru[j].region;
 
                     casosRegionesTiempo[0]=covidPeru[j].confirmed[i].date;
-                    casosRegionesTiempo[j+1]=covidPeru[j].confirmed[i].value;
+                    casosRegionesTiempo[j+1]=parseInt(covidPeru[j].confirmed[i].value);
                 }
                 
                 casosRegionesTiempo[casosRegionesTiempo.length]='';
@@ -54,7 +55,7 @@
 
             var options = {
                 width: 5600,
-                height: 5400,
+                height: 900,
                 legend: { position: 'top', maxLines: 3 },
                 bar: { groupWidth: '75%' },
                 isStacked: true,

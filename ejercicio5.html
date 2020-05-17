@@ -9,12 +9,12 @@
     <div id="demo">
     <h2>Haga gráficos comparativos entre regiones usando líneas</h2>
     <button type="button" onclick="mayoresContagios()">Mostrar</button>
-    <div id="resultado" style="width: 900px; height: 400px;"></div>
+    <div id="resultado" style="width: 900px; height: 800px;"></div>
     </div>
 
     <script>
         
-        google.charts.load('current', {'packages':['bar']});
+        google.charts.load('current', {'packages':['corechart']});
         
         function mayoresContagios() {
         var xhttp = new XMLHttpRequest();
@@ -27,19 +27,17 @@
                 var casos=covidPeru[i].confirmed[64].value;
                 ordenCasosCovidPeru[i]={"region":region,"casos":casos};
             }
-            ordenCasosCovidPeru.sort(function(a,b){
-                return (a.casos - b.casos)
-            })
+   
             var resultado=[];
             resultado[0]=['Regiones', 'Casos'];
             for(var i=0; i<covidPeru.length; i++){
-                resultado[i+1]=[ordenCasosCovidPeru[i].region,ordenCasosCovidPeru[i].casos];
+                resultado[i+1]=[ordenCasosCovidPeru[i].region,parseInt(ordenCasosCovidPeru[i].casos)];
             }
             var data = new google.visualization.arrayToDataTable(resultado);
 
             var options = {
                 title: 'Chess opening moves',
-                width: 700,
+                width: 900,
                 legend: { position: 'none' },
                 chart: { title: 'Casos positivos de Covid en Peru',
                         subtitle: 'Cuadro de resumen casos' },
@@ -52,7 +50,7 @@
                 bar: { groupWidth: "90%" }
             };
 
-            var chart = new google.charts.Bar(document.getElementById('resultado'));
+            var chart = new google.visualization.LineChart(document.getElementById('resultado'));
             chart.draw(data, options);
     
             };
